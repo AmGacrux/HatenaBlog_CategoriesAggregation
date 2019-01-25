@@ -1,0 +1,6 @@
+@startuml
+actor Blog
+database ArticleData
+collections Spreadsheet
+database DataTable
+@enduml

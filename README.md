@@ -9,9 +9,9 @@ Google Chart APIで円グラフとして表示させる。
 
 ## Usage
 
-ここに上げたソースとは別に、Google Spredsheet上に
-Webアプリケーションを作成しそれを利用しているため、
-このままのコードだと意味がない。
+ここに上げたソースとは別に、Google Spredsheet上に  
+Webアプリケーションを作成しそれを利用しているため、  
+このままのコードだと意味がない。  
 （修正予定）
 
 ## Requirement
