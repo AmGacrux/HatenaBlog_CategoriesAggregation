@@ -1,0 +1,2 @@
+# HatenaBlog_CategoriesAggregation
+はてなブログのカテゴリー毎の投稿数を取得する。記事の増減に対応してデータの管理も行う。
