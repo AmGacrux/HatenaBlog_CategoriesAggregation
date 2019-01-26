@@ -1,62 +1,101 @@
 <!--
   はてなブログのサイドバーにこれをまるごと張る
 -->
+
+<head>
+  <meta charset="utf-8">
+  <title>Chart</title>
+  <style type="text/css">
+    #chart {
+      background-color: rgba(255, 255, 255, 0.9);
+      position: relative;
+    }
+  </style>
+</head>
+
 <body>
   <div id="target"></div>
   <script src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <div id="chart">
-  <script>
-    (function () {
-      // 現在のカテゴリ名と投稿数をスプレッドシート側に送信して値の相違を確認する
-      // 増減しているならばスプレッドシートの値を更新する
-      // Todo:
-
-      // Googleスプレッドシートに格納されたカテゴリ名と投稿数のデータを引っ張ってくる
-      return $.ajax({
-        type: "GET",
-        url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
-        dataType: "json"
-      });
-    })().done(function (data) {
-      var items = data;
+    <script>
+      /*
+      var promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          console.log($.ajax({
+            type: "GET",
+            url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
+            dataType: "json"
+          }));},500);});
+          */
+      var items;
+      (function() {
+        return $.ajax({
+          type: "GET",
+          url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
+          dataType: "json"
+        });
+      }().done(function(data) {
+        items = data;
+        test();
+      }));
+      //.done(function (data) {
+      //var items = data;
+      /*
       console.log(items);
       for (var i in items) {
         console.log(items[i].name);
         console.log(items[i].posts);
       }
+      console.log("This is aggreagetedData.")
+      */
+      // });
 
-      (function () {
-        'use strict';
-        google.charts.load('current', { packages: ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
+      function test() {
+        // 現在のカテゴリ名と投稿数をスプレッドシート側に送信して値の相違を確認する
+        // 増減しているならばスプレッドシートの値を更新する
+        // Todo:
+        //     console.log(getAggregatedData().done(function(data) {
+        //      return data;
+        //   }));
+        console.log("Aggregated Data:")
+        console.log(items);
 
-        function drawChart() {
-          var data = new google.visualization.DataTable();
-          data.addColumn('string', 'Categories');
-          data.addColumn('number', 'Posts');
-          for (var i in items) {
-            data.addRow([items[i].name, items[i].posts]);
+        // Googleスプレッドシートに格納されたカテゴリ名と投稿数のデータを引っ張ってくる
+
+        (function () {
+          'use strict';
+          google.charts.load('current', { packages: ['corechart'] });
+          google.charts.setOnLoadCallback(drawChart);
+
+          function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Categories');
+            data.addColumn('number', 'Posts');
+            for (var i in items) {
+              data.addRow([items[i].name, items[i].posts]);
+            }
+
+            var options = {
+              title: 'カテゴリー',
+              width: 300,
+              height: 300,
+              backgroundColor: '',
+              chartArea: { left: 0 },//,top:0},
+              legend: { position: 'top', maxLines: 100 }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('target'));
+            chart.draw(data, options);
           }
-
-          var options = {
-            title: 'カテゴリー',
-            width: 300,
-            height: 300,
-            backgroundColor: '',
-            chartArea:{left:0},//,top:0},
-            legend: {position: 'top', maxLines: 100 }
-          };
-
-          var chart = new google.visualization.PieChart(document.getElementById('target'));
-          chart.draw(data, options);
-        }
-      })();
-      console.log(items);
-    }).fail(function (data) {
-      console.log("FAILURE: Can not load the json data.");
-    });
-  </script>
+        })();
+      }
+      /*
+      test().fail(function (data) {
+        console.log("FAILURE: Can not load the json data.");
+      });
+      */
+    </script>
   </div>
 </body>
 
