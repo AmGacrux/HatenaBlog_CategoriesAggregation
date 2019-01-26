@@ -1,4 +1,4 @@
-@startuml
+@startuml Sequence
 actor Blog
 database ArticleData
 collections Spreadsheet
