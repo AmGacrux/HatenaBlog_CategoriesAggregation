@@ -20,49 +20,58 @@
   <div id="chart">
     <script>
       /*
-      var promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          console.log($.ajax({
-            type: "GET",
-            url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
-            dataType: "json"
-          }));},500);});
-          */
-      var items;
-      (function() {
+      累計データの取得
+      */
+      var aggregatedDataitems;
+      (function getPostedData() {
         return $.ajax({
           type: "GET",
           url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
           dataType: "json"
         });
-      }().done(function(data) {
-        items = data;
-        test();
+      }().done(function (data) {
+        aggregatedDataitems = data;
+        getCurrentData()
       }));
-      //.done(function (data) {
-      //var items = data;
-      /*
-      console.log(items);
-      for (var i in items) {
-        console.log(items[i].name);
-        console.log(items[i].posts);
-      }
-      console.log("This is aggreagetedData.")
-      */
-      // });
 
-      function test() {
+      /*
+      現在データの取得
+      はてなAPIのトークン、APIキーはGAS側のプロパティで管理している
+      */
+      var currentDataitems;
+      (function getCurrentData() {
+        return $.ajax({
+          type: "POST",
+          url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
+          dataType: "json"
+        });
+      }().done(function (data) {
+        currentDataitems = data;
+        drawCircleCart();
+      }));
+
+      /*
+      累計と現在データの比較をする
+      (function getCurrentData() {
+        return $.ajax({
+          type: "POST",
+          url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
+          dataType: "json"
+        });
+      }().done(function (data) {
+        currentDataitems = data;
+        drawCircleCart();
+      }));
+      */
+
+      function drawCircleCart() {
         // 現在のカテゴリ名と投稿数をスプレッドシート側に送信して値の相違を確認する
         // 増減しているならばスプレッドシートの値を更新する
         // Todo:
-        //     console.log(getAggregatedData().done(function(data) {
-        //      return data;
-        //   }));
         console.log("Aggregated Data:")
-        console.log(items);
+        console.log(aggregatedDataitems);
 
         // Googleスプレッドシートに格納されたカテゴリ名と投稿数のデータを引っ張ってくる
-
         (function () {
           'use strict';
           google.charts.load('current', { packages: ['corechart'] });
@@ -72,8 +81,8 @@
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Categories');
             data.addColumn('number', 'Posts');
-            for (var i in items) {
-              data.addRow([items[i].name, items[i].posts]);
+            for (var i in aggregatedDataitems) {
+              data.addRow([aggregatedDataitems[i].name, aggregatedDataitems[i].posts]);
             }
 
             var options = {
@@ -90,11 +99,6 @@
           }
         })();
       }
-      /*
-      test().fail(function (data) {
-        console.log("FAILURE: Can not load the json data.");
-      });
-      */
     </script>
   </div>
 </body>
