@@ -15,8 +15,8 @@
 
 <body>
   <div id="target"></div>
-  <script src="https://www.gstatic.com/charts/loader.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <div id="chart">
     <script>
       /*
@@ -37,6 +37,9 @@
       /*
       現在データの取得
       はてなAPIのトークン、APIキーはGAS側のプロパティで管理している
+      */
+      /*
+        gasの管理はclaspで行うこと
       */
       var currentDataitems;
       (function getCurrentData() {
