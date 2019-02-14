@@ -1,6 +1,8 @@
 <!--
-  はてなブログのサイドバーにこれをまるごと張る
+  はてなブログのサイドバーにまるごと貼る用
 -->
+<!DOCTYPE html>
+<html lang="ja">
 
 <head>
   <meta charset="utf-8">
@@ -15,24 +17,27 @@
 
 <body>
   <div id="target"></div>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <div id="chart">
     <script>
       /*
       累計データの取得
       */
       var aggregatedDataitems;
-      (function getPostedData() {
+      function getPostedData() {
         return $.ajax({
           type: "GET",
           url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
           dataType: "json"
         });
-      }().done(function (data) {
+      }
+      getPostedData().done(function (data) {
         aggregatedDataitems = data;
-        getCurrentData()
-      }));
+        //getCurrentData();
+        //  drawCircleCart();
+      });
+      getPostedData();
 
       /*
       現在データの取得
@@ -41,17 +46,31 @@
       /*
         gasの管理はclaspで行うこと
       */
-      var currentDataitems;
-      (function getCurrentData() {
+      // ...
+
+      function getCurrentData() {
+        /*
         return $.ajax({
           type: "POST",
           url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
+          //url: "https://script.google.com/macros/s/AKfycbw4T5m7D5-OmThMc26D3mnQj-Hf5W-0SACqMR3J9x6hhkVZnYrN/exec",
+          contentType: "application/json",
+          data: JSON.stringify(sendData), 
           dataType: "json"
         });
-      }().done(function (data) {
+        */
+        return $.ajax({
+          type: "GET",
+          //url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
+          url: "https://script.google.com/macros/s/AKfycbxxRHz2khWC8nGKWFBBow5M1f7RVbtchIe1QmJkmvWsEjeFgG4/exec",
+          data: { name: "cmake", posts: 19 },
+          dataType: "json"
+        });
+      }
+      getCurrentData().done(function (data) {
         currentDataitems = data;
         drawCircleCart();
-      }));
+      });
 
       /*
       累計と現在データの比較をする
