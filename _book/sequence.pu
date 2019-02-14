@@ -1,0 +1,60 @@
+@startuml Sequence
+hide footbox
+title ブログパーツ表示からデータ取得、更新、円グラフ描画の流れ　
+
+actor Blogparts
+database HatenaAPI
+database Spreadsheet
+collections CurrentPostsData
+collections AggregatePostsData
+
+[-> Blogparts : DrawRequest
+
+note right: ブログパーツ(html)内のスクリプトからの呼び出し
+
+activate Blogparts
+par 現在の投稿データと累計の投稿データをそれぞれ取得
+Blogparts -> HatenaAPI: 現在の投稿データの取得要求
+activate HatenaAPI
+HatenaAPI -> CurrentPostsData: 現在の投稿データの取得
+activate CurrentPostsData
+HatenaAPI <-- CurrentPostsData
+deactivate CurrentPostsData
+Blogparts <-- HatenaAPI
+deactivate HatenaAPI
+note right: HatenaAPIから受け取ったデータからカテゴリと投稿数を得る
+
+else
+Blogparts -> Spreadsheet: 累計データの取得要求
+activate Spreadsheet
+Spreadsheet -> AggregatePostsData: 累計データの取得
+activate AggregatePostsData
+Spreadsheet <-- AggregatePostsData
+deactivate AggregatePostsData
+Blogparts <-- Spreadsheet
+deactivate Spreadsheet 
+note right: 累計データは値のペアが返ってくるので処理不要
+end
+
+Blogparts -> Blogparts
+note right: この時点で円グラフ描画用のデータは一応確保済み
+
+alt 投稿データが累計よりも増減している
+Blogparts -> Spreadsheet: 累計データの更新要求
+activate Spreadsheet
+Spreadsheet -> AggregatePostsData: 累計データの更新
+activate AggregatePostsData
+Spreadsheet <-- AggregatePostsData
+deactivate AggregatePostsData
+Blogparts <-- Spreadsheet
+deactivate Spreadsheet 
+
+Blogparts <-- Blogparts
+note right: 円グラフ描画用のデータの再設定
+end
+
+[<- Blogparts: DrawChart
+
+deactivate Blogparts
+
+@enduml

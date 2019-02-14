@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset = "utf-8">
+    <title>ストレージ対応確認</title>
+</head>
+
+<body>
+    <script>
+   window.onload = function () {
+    // ローカルストレージ対応判定
+     if(!localStorage) {
+         alert('ローカルストレージに対応していない');
+     }
+     // セッションストレージ対応判定
+     if(!sessionStorage) {
+         alert('セッションストレージに対応していない');
+     }
+}
+ 
+    </script>
+</body>
+
+</html>

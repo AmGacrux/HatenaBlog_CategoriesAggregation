@@ -9,6 +9,12 @@ Google Chart APIで円グラフとして表示させる。
 
 ## Usage
 
+## Design
+
+[![アクティビティ図]](out/activity.svg)(out/activity.svg)
+
+##
+
 ここに上げたソースとは別に、Google Spredsheet上に  
 Webアプリケーションを作成しそれを利用しているため、  
 このままのコードだと意味がない。  
