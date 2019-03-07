@@ -17,8 +17,7 @@ Google Chart APIで円グラフとして表示させる。
 
 ここに上げたソースとは別に、Google Spredsheet上に  
 Webアプリケーションを作成しそれを利用しているため、  
-このままのコードだと意味がない。  
-（修正予定）
+別途、claspでGoogle Spreadsheetにgasファイルを配置する必要がある。
 
 ## Requirement
 
